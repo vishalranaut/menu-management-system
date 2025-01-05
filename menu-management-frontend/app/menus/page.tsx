@@ -1,16 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import { Sidebar } from "@/components/sidebar";
 import { MenuTree } from "@/components/menu-tree";
 import { MenuForm } from "@/components/menu-form";
 import { Folder } from "lucide-react";
 import WidgetsIcon from "@mui/icons-material/Widgets";
 
 export default function MenusPage() {
+  const [refreshKey, setRefreshKey] = useState(0);
+
   const handleSave = async (data: { name: string }) => {
     try {
       console.log("Saved menu:", data);
+
+      setRefreshKey((prev) => prev + 1);
     } catch (error) {
       console.error("Failed to save menu:", error);
     }
@@ -18,7 +21,6 @@ export default function MenusPage() {
 
   return (
     <div className="flex h-screen bg-background">
-      <Sidebar />
       <div className="flex-1 flex flex-col">
         <div className="flex items-center px-4 py-2 space-x-2">
           <Folder className="text-gray-600 w-5 h-5 fill-gray-100" />
@@ -38,14 +40,16 @@ export default function MenusPage() {
                 Menus
               </h2>
             </div>
-            <MenuTree />
+
+            <MenuTree key={refreshKey} />
           </div>
 
           <div className="w-1/2">
             <div className="h-16 flex items-center px-6">
               <h2 className="text-lg font-semibold">Menu Details</h2>
             </div>
-            <MenuForm name="System Code" onSave={handleSave} />
+
+            <MenuForm key={refreshKey} name="" onSave={handleSave} />
           </div>
         </div>
       </div>

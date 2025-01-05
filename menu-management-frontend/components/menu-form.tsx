@@ -99,6 +99,7 @@ export function MenuForm({ name: initialName, onSave }: MenuFormProps) {
             onChange={(e) => setName(e.target.value)}
             className="border-primary/20 focus:border-primary"
             disabled={isLoading}
+            placeholder="Enter menu name"
           />
         </div>
 

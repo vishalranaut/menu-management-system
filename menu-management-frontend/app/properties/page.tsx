@@ -1,12 +1,10 @@
 "use client";
 
-import { Sidebar } from "@/components/sidebar";
 import { Folder } from "lucide-react";
 
 export default function PropertiesPage() {
   return (
     <div className="flex h-screen bg-background">
-      <Sidebar />
       <div className="flex-1 flex flex-col">
         <div className="flex items-center px-4 py-2 space-x-2">
           <Folder className="text-gray-600 w-5 h-5 fill-gray-100" />

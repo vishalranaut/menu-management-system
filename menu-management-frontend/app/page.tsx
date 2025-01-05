@@ -1,12 +1,10 @@
 "use client";
 
-import { Sidebar } from "@/components/sidebar";
 import { ArrowRight, Layers, Settings, Users } from "lucide-react";
 
 export default function Home() {
   return (
     <div className="flex h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
-      <Sidebar />
       <div className="flex-1 p-8 overflow-auto">
         <header className="max-w-4xl mx-auto mb-10">
           <div className="flex items-center space-x-4 mb-4">
