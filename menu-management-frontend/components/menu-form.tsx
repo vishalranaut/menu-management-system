@@ -110,7 +110,6 @@ export function MenuForm({ name: initialName, onSave }: MenuFormProps) {
           </p>
         )}
 
-        {/* Submit Button */}
         <Button type="submit" className="w-full" disabled={isLoading}>
           {isLoading ? "Saving..." : "Save Changes"}
         </Button>
