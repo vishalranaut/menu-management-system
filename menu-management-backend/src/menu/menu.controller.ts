@@ -17,41 +17,44 @@ import { MenuEntity } from './entities/menu.entity';
 @Controller('menu')
 @ApiTags('menu')
 export class MenuController {
-  constructor(private readonly MenuService: MenuService) {}
+  constructor(private readonly menuService: MenuService) {}
 
   @Post('create')
   @ApiCreatedResponse({ type: MenuEntity })
-  create(@Body() CreateMenuDto: CreateMenuDto) {
-    return this.MenuService.create(CreateMenuDto);
+  create(@Body() createMenuDto: CreateMenuDto) {
+    return this.menuService.create(createMenuDto);
   }
 
   @Get('list')
   @ApiOkResponse({ type: MenuEntity, isArray: true })
   findAll() {
-    return this.MenuService.findAll();
+    return this.menuService.findAll();
   }
 
   @Get('root')
   @ApiOkResponse({ type: MenuEntity, isArray: true })
   findDrafts() {
-    return this.MenuService.getRootMenus();
+    return this.menuService.getRootMenus();
   }
 
   @Get(':id')
   @ApiOkResponse({ type: MenuEntity })
   findOne(@Param('id', ParseIntPipe) id: string) {
-    return this.MenuService.findOne(id);
+    return this.menuService.findOne(id);
   }
 
   @Patch(':id')
-  @ApiCreatedResponse({ type: MenuEntity })
-  update(@Param('id', ParseIntPipe) id: string, UpdateMenuDto: UpdateMenuDto) {
-    return this.MenuService.update(id, UpdateMenuDto);
+  @ApiOkResponse({ type: MenuEntity })
+  update(
+    @Param('id', ParseIntPipe) id: string,
+    @Body() updateMenuDto: UpdateMenuDto,
+  ) {
+    return this.menuService.update(id, updateMenuDto);
   }
 
   @Delete(':id')
   @ApiOkResponse({ type: MenuEntity })
   remove(@Param('id', ParseIntPipe) id: string) {
-    return this.MenuService.remove(id);
+    return this.menuService.remove(id);
   }
 }
