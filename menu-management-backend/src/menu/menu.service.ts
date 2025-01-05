@@ -25,20 +25,28 @@ export class MenuService {
       });
 
       const buildTree = (
-        items: Array<{ id: string; name: string; parentId: string | null }>,
+        items: Array<{
+          id: string;
+          name: string;
+          depth: number;
+          parentId: string | null;
+        }>,
         parentId: string | null = null,
-      ) =>
+      ): Array<{ id: string; name: string; depth: number; children: any[] }> =>
         items
           .filter((item) => item.parentId === parentId)
           .map((item) => ({
             id: item.id,
             name: item.name,
+            depth: item.depth,
             children: buildTree(items, item.id),
           }));
 
       const hierarchicalMenus = buildTree(flatMenus);
+
       return hierarchicalMenus;
     } catch (error) {
+      console.error('Error retrieving menu hierarchy:', error);
       throw new Error(`Failed to retrieve menu hierarchy: ${error.message}`);
     }
   }

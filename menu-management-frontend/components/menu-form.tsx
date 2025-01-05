@@ -1,41 +1,63 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { createMenuItem } from "@/lib/api/menu";
+import { useSelectedMenu } from "@/lib/hooks/use-selected-menu";
+import { v4 as uuidv4 } from "uuid";
 
 interface MenuFormProps {
-  id: string;
-  depth: number;
-  parentId: string | null;
   name: string;
   onSave: (data: { name: string }) => void;
-  isLoading: boolean;
 }
 
-export function MenuForm({
-  id,
-  depth,
-  parentId,
-  name: initialName,
-  onSave,
-}: MenuFormProps) {
+export function MenuForm({ name: initialName, onSave }: MenuFormProps) {
+  const { selectedMenu } = useSelectedMenu();
   const [name, setName] = useState(initialName);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<boolean>(false);
 
+  const [id] = useState<string>(uuidv4());
+
+  const [depth, setDepth] = useState<number>(selectedMenu?.depth || 0);
+  const [parentId, setParentId] = useState<string | null>(
+    selectedMenu?.id || null
+  );
+  const [parentName, setParentName] = useState<string | null>(
+    selectedMenu?.name || null
+  );
+
+  useEffect(() => {
+    if (selectedMenu) {
+      setDepth(selectedMenu.depth + 1);
+      setParentId(selectedMenu.id);
+      setParentName(selectedMenu.name);
+    }
+  }, [selectedMenu]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (name.trim() === "") {
+      setError("Name cannot be empty.");
+      return;
+    }
+
     setIsLoading(true);
     setError(null);
     setSuccess(false);
 
     try {
-      const menuItem = { id, name, depth, parentId: parentId as string };
+      const menuItem = {
+        id,
+        name,
+        depth,
+        parentId,
+      };
       await createMenuItem(menuItem);
       setSuccess(true);
       onSave({ name });
@@ -54,19 +76,22 @@ export function MenuForm({
           <Label htmlFor="menuId">Menu ID</Label>
           <Input id="menuId" value={id} readOnly className="bg-muted" />
         </div>
+
         <div className="space-y-2">
           <Label htmlFor="depth">Depth</Label>
           <Input id="depth" value={depth} readOnly className="bg-muted" />
         </div>
+
         <div className="space-y-2">
           <Label htmlFor="parentId">Parent</Label>
           <Input
             id="parentId"
-            value={parentId ? parentId : "None"}
+            value={parentName ? parentName : "None"}
             readOnly
             className="bg-muted"
           />
         </div>
+
         <div className="space-y-2">
           <Label htmlFor="name">Name</Label>
           <Input
@@ -85,6 +110,7 @@ export function MenuForm({
           </p>
         )}
 
+        {/* Submit Button */}
         <Button type="submit" className="w-full" disabled={isLoading}>
           {isLoading ? "Saving..." : "Save Changes"}
         </Button>

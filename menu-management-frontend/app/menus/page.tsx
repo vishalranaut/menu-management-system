@@ -6,21 +6,13 @@ import { MenuTree } from "@/components/menu-tree";
 import { MenuForm } from "@/components/menu-form";
 import { Folder } from "lucide-react";
 import WidgetsIcon from "@mui/icons-material/Widgets";
-import { updateMenu } from "@/lib/api/menu";
-import { MenuFormData } from "@/lib/types/menu";
 
 export default function MenusPage() {
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleSave = async (data: MenuFormData) => {
-    setIsLoading(true);
+  const handleSave = async (data: { name: string }) => {
     try {
-      await updateMenu("56320ee9-6af6-11ed-a7ba-f220afe5e4a9", data);
-      console.log("Menu updated successfully:", data);
+      console.log("Saved menu:", data);
     } catch (error) {
-      console.error("Failed to update menu:", error);
-    } finally {
-      setIsLoading(false);
+      console.error("Failed to save menu:", error);
     }
   };
 
@@ -53,14 +45,7 @@ export default function MenusPage() {
             <div className="h-16 flex items-center px-6">
               <h2 className="text-lg font-semibold">Menu Details</h2>
             </div>
-            <MenuForm
-              id="56320ee9-6af6-11ed-a7ba-f220afe5e4a9"
-              depth={0}
-              parentId={null}
-              name="System Code"
-              onSave={handleSave}
-              isLoading={isLoading}
-            />
+            <MenuForm name="System Code" onSave={handleSave} />
           </div>
         </div>
       </div>

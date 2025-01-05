@@ -12,17 +12,19 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { fetchMenus } from "@/lib/api/menu";
+import { useSelectedMenu } from "@/lib/hooks/use-selected-menu";
 
 export function MenuTree() {
   const [menus, setMenus] = useState<MenuItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const { setSelectedMenu } = useSelectedMenu();
+
   const { menuState, toggleExpand, selectItem, expandAll, collapseAll } =
     useMenuTree(menus);
 
   const [activeButton, setActiveButton] = useState<
     "expand" | "collapse" | null
   >(null);
-  const [selectedAction, setSelectedAction] = useState<string>("");
 
   useEffect(() => {
     async function getMenus() {
@@ -49,8 +51,12 @@ export function MenuTree() {
   };
 
   const handleActionChange = (value: string) => {
-    setSelectedAction(value);
-    console.log(`Selected action: ${value}`);
+    try {
+      const menu = JSON.parse(value);
+      setSelectedMenu(menu);
+    } catch (error) {
+      console.error("Error parsing menu:", error);
+    }
   };
 
   if (loading) {
@@ -60,6 +66,7 @@ export function MenuTree() {
   return (
     <div className="p-4">
       <span className="text-gray-400 mb-2 block">Menu</span>
+
       <div className="mb-4">
         <Select onValueChange={handleActionChange}>
           <SelectTrigger className="w-1/2">
@@ -67,7 +74,7 @@ export function MenuTree() {
           </SelectTrigger>
           <SelectContent>
             {menus.map((menu) => (
-              <SelectItem key={menu.id} value={menu.id}>
+              <SelectItem key={menu.id} value={JSON.stringify(menu)}>
                 {menu.name}
               </SelectItem>
             ))}
