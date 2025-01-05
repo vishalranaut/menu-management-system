@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useCallback } from 'react';
-import { MenuItem, MenuState } from '@/lib/types/menu';
+import { useState, useCallback } from "react";
+import { MenuItem, MenuState } from "@/lib/types/menu";
 
 export function useMenuTree(initialMenus: MenuItem[]) {
   const [menuState, setMenuState] = useState<MenuState>({
@@ -9,36 +9,38 @@ export function useMenuTree(initialMenus: MenuItem[]) {
     expandedIds: new Set([initialMenus[0]?.id]),
   });
 
-  const toggleExpand = useCallback((id: string) => {
-    setMenuState(prev => {
-      const newExpanded = new Set(prev.expandedIds);
-      if (newExpanded.has(id)) {
-        // When collapsing, also collapse all children
-        const collapseChildren = (item: MenuItem) => {
-          if (item.id === id) {
-            newExpanded.delete(item.id);
-            item.children?.forEach(child => {
-              collapseChildren(child);
-            });
-          }
-        };
-        
-        initialMenus.forEach(menu => {
-          const findAndCollapse = (item: MenuItem) => {
-            collapseChildren(item);
-            item.children?.forEach(child => findAndCollapse(child));
+  const toggleExpand = useCallback(
+    (id: string) => {
+      setMenuState((prev) => {
+        const newExpanded = new Set(prev.expandedIds);
+        if (newExpanded.has(id)) {
+          const collapseChildren = (item: MenuItem) => {
+            if (item.id === id) {
+              newExpanded.delete(item.id);
+              item.children?.forEach((child) => {
+                collapseChildren(child);
+              });
+            }
           };
-          findAndCollapse(menu);
-        });
-      } else {
-        newExpanded.add(id);
-      }
-      return { ...prev, expandedIds: newExpanded };
-    });
-  }, [initialMenus]);
+
+          initialMenus.forEach((menu) => {
+            const findAndCollapse = (item: MenuItem) => {
+              collapseChildren(item);
+              item.children?.forEach((child) => findAndCollapse(child));
+            };
+            findAndCollapse(menu);
+          });
+        } else {
+          newExpanded.add(id);
+        }
+        return { ...prev, expandedIds: newExpanded };
+      });
+    },
+    [initialMenus]
+  );
 
   const selectItem = useCallback((id: string) => {
-    setMenuState(prev => ({ ...prev, selectedId: id }));
+    setMenuState((prev) => ({ ...prev, selectedId: id }));
   }, []);
 
   const expandAll = useCallback((items: MenuItem[]) => {
@@ -52,14 +54,14 @@ export function useMenuTree(initialMenus: MenuItem[]) {
       }, []);
     };
 
-    setMenuState(prev => ({
+    setMenuState((prev) => ({
       ...prev,
       expandedIds: new Set(getAllIds(items)),
     }));
   }, []);
 
   const collapseAll = useCallback(() => {
-    setMenuState(prev => ({
+    setMenuState((prev) => ({
       ...prev,
       expandedIds: new Set(),
     }));

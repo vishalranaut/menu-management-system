@@ -10,6 +10,7 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { cn } from "@/lib/utils";
+import { useSelectedMenu } from "@/lib/hooks/use-selected-menu";
 
 interface MenuTreeItemProps {
   item: MenuItem;
@@ -36,12 +37,19 @@ export function MenuTreeItem({
 }: MenuTreeItemProps) {
   const hasChildren = item.children && item.children.length > 0;
   const paddingLeft = depth > 0 ? depth * 24 + 32 : 8;
-
+  const { setSelectedMenu } = useSelectedMenu();
   const handleToggle = (e: React.MouseEvent) => {
     e.stopPropagation();
     onToggle(item.id);
   };
-
+  const handleAction = (value: string) => {
+    try {
+      const menu = JSON.parse(value);
+      setSelectedMenu(menu);
+    } catch (error) {
+      console.error("Error parsing menu:", error);
+    }
+  };
   return (
     <div className="relative">
       <TreeLine depth={depth} isLast={isLast} hasChildren={hasChildren} />
@@ -82,6 +90,10 @@ export function MenuTreeItem({
             variant="ghost"
             size="icon"
             className="h-6 w-6 p-0 ml-auto rounded-full bg-blue-500 opacity-0 group-hover:opacity-100 hover:bg-blue-600 focus:outline-none"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleAction(JSON.stringify(item));
+            }}
           >
             <Plus className="h-4 w-4 text-white" />
           </Button>

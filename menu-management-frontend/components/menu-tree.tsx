@@ -109,7 +109,10 @@ export function MenuTree() {
         </Button>
       </div>
 
-      <div className="space-y-0.5">
+      <div
+        className="space-y-0.5 overflow-y-auto max-h-96 border rounded-md p-2 scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-200 scrollbar-rounded-lg"
+        style={{ scrollBehavior: "smooth" }}
+      >
         {menus.map((menu, index) => (
           <MenuTreeItem
             key={menu.id}
