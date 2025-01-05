@@ -110,8 +110,14 @@ export function MenuForm({ name: initialName, onSave }: MenuFormProps) {
           </p>
         )}
 
-        <Button type="submit" className="w-full" disabled={isLoading}>
-          {isLoading ? "Saving..." : "Save Changes"}
+        <Button
+          type="submit"
+          className={`w-1/2 bg-blue-700  text-white font-bold  py-2 px-4 rounded-full ${
+            isLoading ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-600"
+          }`}
+          disabled={isLoading}
+        >
+          {isLoading ? "Saving..." : "Save"}
         </Button>
       </Card>
     </form>

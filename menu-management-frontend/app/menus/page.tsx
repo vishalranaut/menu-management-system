@@ -34,7 +34,7 @@ export default function MenusPage() {
           <div className="w-1/2 ">
             <div className="h-16 flex items-center px-6">
               <h2 className="text-lg font-bold flex items-center">
-                <span className="w-10 h-10 bg-blue-500 text-white flex items-center justify-center rounded-full mr-2">
+                <span className="w-10 h-10 bg-blue-700 text-white flex items-center justify-center rounded-full mr-2">
                   <WidgetsIcon className="text-white" />
                 </span>
                 Menus

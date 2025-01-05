@@ -89,7 +89,7 @@ export function MenuTreeItem({
           <Button
             variant="ghost"
             size="icon"
-            className="h-6 w-6 p-0 ml-auto rounded-full bg-blue-500 opacity-0 group-hover:opacity-100 hover:bg-blue-600 focus:outline-none"
+            className="h-6 w-6 p-0 ml-auto rounded-full bg-blue-700 opacity-0 group-hover:opacity-100 hover:bg-blue-600 focus:outline-none"
             onClick={(e) => {
               e.stopPropagation();
               handleAction(JSON.stringify(item));
