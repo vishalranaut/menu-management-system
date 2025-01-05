@@ -53,7 +53,6 @@ export function MenuForm({ name: initialName, onSave }: MenuFormProps) {
 
     try {
       const menuItem = {
-        id,
         name,
         depth,
         parentId,
